@@ -8,6 +8,20 @@ def reformat(e):
     e = lift(e)
     return stringify(e)
 
+# e is a term, not a string.
+def vars_of(e):
+    if type(e) == str:
+        assert("(" not in e)
+        if e.islower():
+            return set()
+        else:
+            return {e}
+    s = set()
+    for x in e[1]:
+        s = s.union(vars_of(x))
+    return s
+
+# converts term to term
 def lift(e):
     global CTR
 
@@ -17,12 +31,19 @@ def lift(e):
     if e[0] != "lam":
         return (e[0], args)
 
+    [var, body] = args
+
     name = "lifted" + str(CTR)
+    vs = vars_of(body) - set(var)
+    if vs:
+        applied = (name, vs)
+    else:
+        applied = name
+
     CTR += 1
 
-    [var, body] = args
-    outs.append("cnf(a,axiom, app(" + name + ", " + var + ")  = " + body + ").")
-    return name
+    outs.append("cnf(a,axiom, app(" + stringify(applied) + ", " + var + ")  = " + stringify(body) + ").")
+    return applied
 
 def stringify(e):
     if type(e) != tuple:
