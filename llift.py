@@ -100,27 +100,33 @@ def parse_expr(s):
         raise ValueError(f"Extra data at end: {s[pos:]}")
     return result
 
+def get_lines(f):
+    current = ""
+    for line in open(f).readlines():
+        i = line.find("%")
+        if i != -1:
+            line = line[:i]
+        current += line.strip()
+        if current.endswith("."):
+            yield current
+            current = ""
+
 s = ""
-for line in open(sys.argv[1]).readlines():
-    i = line.find("%")
-    if i != -1:
-        line = line[:i]
-    line = line.strip()
-    if line != "":
-        assert(line.startswith("cnf(a,axiom,"))
-        assert(line.endswith(")."))
-        line = line[13:-2]
-        if "!=" in line:
-            [a, b] = line.split("!=")
-            a = reformat(a)
-            b = reformat(b)
-            g = a + " != " + b
-        else:
-            [a, b] = line.split("=")
-            a = reformat(a)
-            b = reformat(b)
-            g = a + " = " + b
-        outs.append("cnf(a,axiom," + g + ").")
+for line in get_lines(sys.argv[1]):
+    assert(line.startswith("cnf(a,axiom,"))
+    assert(line.endswith(")."))
+    line = line[13:-2]
+    if "!=" in line:
+        [a, b] = line.split("!=")
+        a = reformat(a)
+        b = reformat(b)
+        g = a + " != " + b
+    else:
+        [a, b] = line.split("=")
+        a = reformat(a)
+        b = reformat(b)
+        g = a + " = " + b
+    outs.append("cnf(a,axiom," + g + ").")
 
 outs.append("cnf(a,axiom, ifeq(X, X, T) = T).")
 outs.append("cnf(a,axiom, ifeq(app(F1, bot), app(F2, bot), F1) = ifeq(app(F1, bot), app(F2, bot), F2)).")
