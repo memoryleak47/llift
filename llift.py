@@ -1,8 +1,28 @@
 import sys
 
+CTR = 0
+outs = []
+
 def reformat(e):
-    ee = parse_expr(e)
-    return stringify(ee)
+    e = parse_expr(e)
+    e = lift(e)
+    return stringify(e)
+
+def lift(e):
+    global CTR
+
+    if type(e) == str:
+        return e
+    args = [lift(x) for x in e[1]]
+    if e[0] != "lam":
+        return (e[0], args)
+
+    name = "lifted" + str(CTR)
+    CTR += 1
+
+    [var, body] = args
+    outs.append("cnf(a,axiom, app(" + name + ", " + var + ")  = " + body + ").")
+    return name
 
 def stringify(e):
     if type(e) != tuple:
@@ -79,7 +99,9 @@ for line in open(sys.argv[1]).readlines():
             a = reformat(a)
             b = reformat(b)
             g = a + " = " + b
-        print("cnf(a,axiom," + g + ").")
+        outs.append("cnf(a,axiom," + g + ").")
 
-print("cnf(a,axiom, ifeq(X, X, T) = T).")
-print("cnf(a,axiom, ifeq(app(F1, bot), app(F2, bot), F1) = ifeq(app(F1, bot), app(F2, bot), F2)).")
+outs.append("cnf(a,axiom, ifeq(X, X, T) = T).")
+outs.append("cnf(a,axiom, ifeq(app(F1, bot), app(F2, bot), F1) = ifeq(app(F1, bot), app(F2, bot), F2)).")
+for x in outs:
+    print(x)
