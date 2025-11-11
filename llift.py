@@ -80,3 +80,6 @@ for line in open(sys.argv[1]).readlines():
             b = reformat(b)
             g = a + " = " + b
         print("cnf(a,axiom," + g + ").")
+
+print("cnf(a,axiom, ifeq(X, X, T) = T).")
+print("cnf(a,axiom, ifeq(app(F1, bot), app(F2, bot), F1) = ifeq(app(F1, bot), app(F2, bot), F2)).")
