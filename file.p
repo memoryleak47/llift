@@ -21,7 +21,18 @@ cnf(a,axiom, dot(A, B) = sum(lam(X, mul(app(A, X), app(B, X))))).
 cnf(a,axiom, memset(C) = lam(X, C)).
 cnf(a,axiom, sum(memset(C)) = mul(C, size)).
 
-cnf(a,axiom, lhs = dot(n20, n21)).
-cnf(a,axiom, rhs = dot(n21, n20)).
+cnf(a,axiom, transpose(A) = lam(X, lam(Y, app(app(A, Y), X)))).
 
-cnf(a,axiom, lhs != rhs).
+% should this be transpose(A)?
+cnf(a,axiom, mv(A, B) = lam(X, dot(app(A, X), B))).
+
+% do these indices make sense?
+cnf(a,axiom, mm(A, B) = lam(X, mv(A, app(B, X)))).
+
+
+% Things we are able to prove:
+%cnf(a,axiom, dot(x,y) != dot(y,x)).
+%cnf(a,axiom, zero != app(mv(memset(memset(bar)), memset(zero)), any)).
+%cnf(a,axiom, zero != app(mv(memset(memset(zero)), memset(foo)), any)).
+%cnf(a,axiom, size != app(mv(memset(memset(one)), memset(one)), any)).
+%cnf(a,axiom, transpose(transpose(aa)) != aa).
