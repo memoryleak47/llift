@@ -37,4 +37,4 @@ cnf(a,axiom, mm(A, B) = lam(X, mv(A, app(B, X)))).
 %cnf(a,axiom, size != app(mv(memset(memset(one)), memset(one)), any)).
 %cnf(a,axiom, memset(memset(zero)) != mm(memset(memset(zero)), foo)).
 %cnf(a,axiom, memset(memset(zero)) != mm(foo, memset(memset(zero)))).
-%cnf(a,axiom, transpose(transpose(aa)) != aa).
+cnf(a,axiom, transpose(transpose(aa)) != aa).
