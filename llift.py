@@ -128,7 +128,6 @@ for line in get_lines(sys.argv[1]):
         g = a + " = " + b
     outs.append("cnf(a,axiom," + g + ").")
 
-outs.append("cnf(a,axiom, ifeq(X, X, T) = T).")
-outs.append("cnf(a,axiom, ifeq(app(F1, bot(F1,F2)), app(F2, bot(F1,F2)), F1) = ifeq(app(F1, bot(F1,F2)), app(F2, bot(F1,F2)), F2)).")
+outs.append("cnf(a,axiom, app(F1, bot(F1,F2)) = app(F2, bot(F1,F2)) => F1=F2).")
 for x in outs:
     print(x)
